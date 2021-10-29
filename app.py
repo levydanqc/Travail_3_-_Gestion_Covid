@@ -1,23 +1,29 @@
-from flask import Flask
-from flask.templating import render_template
+from flask import Flask, render_template
+from flask.helpers import url_for
 import config
 from bd import db
 from blueprint.gestion_cas.gestion_cas import routes
 
 
 def create_app():
-    app_flask = Flask(__name__, template_folder="blueprint/gestion_cas")
-    app_flask.config.from_object(config.DevelopmentConfig)
-    app_flask.register_blueprint(routes)
-    compte = f'{app_flask.config["DB_USERNAME"]}:{app_flask.config["DB_PASSWORD"]}'
-    serveur_bd = f'{app_flask.config["DB_SERVEUR"]}/{app_flask.config["DB_NAME"]}'
-    app_flask.config['SQLALCHEMY_DATABASE_URI'] = f"""mysql://{compte}@{serveur_bd}""" 
-    app_flask.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db.init_app(app_flask)
-    return app_flask
+    app = Flask(__name__, template_folder='blueprint')
+    app.config.from_object(config.DevelopmentConfig)
+    app.register_blueprint(routes)
+    compte = f'{app.config["DB_USERNAME"]}:{app.config["DB_PASSWORD"]}'
+    serveur_bd = f'{app.config["DB_SERVEUR"]}/{app.config["DB_NAME"]}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"""mysql://{compte}@{serveur_bd}"""
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+    return app
 
 
 app = create_app()
+
+
+@app.route('/')
+def index():
+    return 'Test'
+
 
 if __name__ == '__main__':
     app.run(debug=True)

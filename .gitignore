@@ -1,5 +1,5 @@
-consign
-es
+consignes
+config.py
 
 # Created by https://www.toptal.com/developers/gitignore/api/flask,visualstudiocode,venv,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=flask,visualstudiocode,venv,python

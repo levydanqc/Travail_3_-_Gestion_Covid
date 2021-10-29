@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 
 from models.cas import Cas
-from models.regions import Region
+from models.regions import Regions
 from bd import db
 
 routes = Blueprint('gestion_cas', __name__,
@@ -32,12 +32,12 @@ def creer_cas():
         erreurs = cas.valider()
         if len(erreurs) > 0:
             # flash(erreurs, 'danger')
-            return render_template('creer.html', cas=cas, erreurs=erreurs, regions=Region.query.order_by(Region.nom).all())
+            return render_template('creer.html', cas=cas, erreurs=erreurs, regions=Regions.query.order_by(Regions.nom).all())
         db.session.add(cas)
         db.session.commit()
         # flash('Cas créé avec succès !')
         return redirect(url_for('afficher_cas', id=request.form.get('id')))
-    return render_template('creer_cas.html', regions=Region.query.order_by(Region.nom).all())
+    return render_template('creer_cas.html', regions=Regions.query.order_by(Regions.nom).all())
 
 
 @routes.route('/<int:id>/modifier')

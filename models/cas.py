@@ -1,5 +1,5 @@
 from bd import db
-from models.regions import Region
+from models.regions import Regions
 
 
 class Cas(db.Model):
@@ -9,10 +9,8 @@ class Cas(db.Model):
     date = db.Column(db.Date, nullable=False)
     prenom = db.Column(db.String(45), nullable=False)
     nom = db.Column(db.String(45), nullable=False)
-    region_id = db.Column(db.Integer, db.ForeignKey('regions.id'), unique=True)
-    region = db.relationship(
-        "regions", backref=db.backref("parent", lazy=True))
-    compte_id = db.Column(db.Integer, unique=True)
+    region_id = db.Column(db.Integer, db.ForeignKey('regions.id'), nullable=False)
+    compte_id = db.Column(db.Integer,nullable=False)
 
     def __repr__(self):
         return 'Nom: %s' % (self.nom[0]+self.prenom[0])
