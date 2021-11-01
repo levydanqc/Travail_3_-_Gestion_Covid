@@ -28,9 +28,12 @@ CREATE TABLE `cas` (
   `prenom` varchar(45) DEFAULT NULL,
   `nom` varchar(45) DEFAULT NULL,
   `region_id` int(11) NOT NULL,
+  `compte_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_region_idx` (`region_id`),
   CONSTRAINT `FK_region` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `FK_compte_idx` (`compte_id`),
+  CONSTRAINT `FK_compte` FOREIGN KEY (`compte_id`) REFERENCES `comptes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -64,9 +67,36 @@ CREATE TABLE `regions` (
 
 LOCK TABLES `regions` WRITE;
 /*!40000 ALTER TABLE `regions` DISABLE KEYS */;
-INSERT INTO `regions` VALUES (1,'01','Bas-Saint-Laurent'),(2,'02','Saguenay–Lac-Saint-Jean'),(3,'03','Capitale-Nationale'),(4,'05','Estrie'),(5,'06','Montréal'),(6,'07','Outaouais'),(7,'08','Abitibi-Témiscamingue'),(8,'09','Côte-Nord'),(9,'10','Nord-du-Québec'),(10,'11','Gaspésie–Îles-de-la-Madelein'),(11,'12','Chaudière-Appalaches'),(12,'13','Laval'),(13,'14','Lanaudière'),(14,'15','Laurentides'),(15,'16','Montérégie'),(16,'17','Centre-du-Québec'),(17,'01','Bas-Saint-Laurent'),(18,'02','Saguenay–Lac-Saint-Jean'),(19,'03','Capitale-Nationale'),(20,'05','Estrie'),(21,'06','Montréal'),(22,'07','Outaouais'),(23,'08','Abitibi-Témiscamingue'),(24,'09','Côte-Nord'),(25,'10','Nord-du-Québec'),(26,'11','Gaspésie–Îles-de-la-Madelein'),(27,'12','Chaudière-Appalaches'),(28,'13','Laval'),(29,'14','Lanaudière'),(30,'15','Laurentides'),(31,'16','Montérégie'),(32,'17','Centre-du-Québec'),(33,'04','Mauricie');
+INSERT INTO `regions` VALUES (null,'01','Bas-Saint-Laurent'),(null,'02','Saguenay–Lac-Saint-Jean'),(null,'03','Capitale-Nationale'),(null,'04','Mauricie'),(null,'05','Estrie'),(null,'06','Montréal'),(null,'07','Outaouais'),(null,'08','Abitibi-Témiscamingue'),(null,'09','Côte-Nord'),(null,'10','Nord-du-Québec'),(null,'11','Gaspésie–Îles-de-la-Madelein'),(null,'12','Chaudière-Appalaches'),(null,'13','Laval'),(null,'14','Lanaudière'),(null,'15','Laurentides'),(null,'16','Montérégie'),(null,'17','Centre-du-Québec');
 /*!40000 ALTER TABLE `regions` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `comptes`
+--
+
+DROP TABLE IF EXISTS `comptes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `comptes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `compte` varchar(45) DEFAULT NULL,
+  `admin` tinyint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comptes`
+--
+
+LOCK TABLES `comptes` WRITE;
+/*!40000 ALTER TABLE `comptes` DISABLE KEYS */;
+-- INSERT INTO `comptes` VALUES (null,'01','Bas-Saint-Laurent');
+/*!40000 ALTER TABLE `comptes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

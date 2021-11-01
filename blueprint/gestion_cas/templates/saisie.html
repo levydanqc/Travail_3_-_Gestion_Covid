@@ -4,9 +4,9 @@
 {% block content %}
 
 {% if messages is defined %}
-<ul>
+<ul class="mx-3">
   {% for message in messages.values() %}
-  <li>{{message}}</li>
+  <li class="text-danger">{{message}}</li>
   {% endfor %}
 </ul>
 {% else %}
@@ -15,27 +15,28 @@
 
 <body class="container">
   <h1>Saisie</h1>
-  <form>
+  <form method="POST" novalidate="novalidate">
     <div class="form-group">
       <label for="nom">Nom</label>
-      <input type="text" class="form-control" id="nom">
+      <input type="text" class="form-control" id="nom" name="nom">
       <p class="text-danger">{{messages["nom"] if messages["nom"] is defined else '&nbsp;'|safe}}</p>
     </div>
     <div class="form-group">
       <label for="prenom">Prénom</label>
-      <input type="text" class="form-control" id="prenom">
+      <input type="text" class="form-control" id="prenom" name="prenom">
       <p class="text-danger">{{messages["prenom"] if messages["prenom"] is defined else '&nbsp;'|safe}}</p>
     </div>
     <div class="form-group">
       <label for="exampleFormControlSelect1">Régions</label>
-      <select class="form-control" id="exampleFormControlSelect1">
-        <option>-- Choisir une région --</option>
-        <option>Capitale-Nationale</option>
-        <option>Outaouais</option>
-        <option>...</option>
-        <option>Côte-Nord</option>
+      <select class="form-control" name="region" id="exampleFormControlSelect1">
+        <option value="" selected="selected" disabled="disabled">-- Choisir une région --</option>
+        {% for region in regions %}
+        <option value="{{region.id}}">{{region.nom}}</option>
+        {% endfor %}
       </select>
+      <p class="text-danger">{{messages["region"] if messages["region"] is defined else '&nbsp;'|safe}}</p>
     </div>
+
     <button type="submit" class="btn btn-primary">Envoyer</button>
   </form>
 

@@ -1,5 +1,6 @@
 from bd import db
 from models.regions import Regions
+import datetime as dt
 
 
 class Cas(db.Model):
@@ -9,37 +10,38 @@ class Cas(db.Model):
     date = db.Column(db.Date, nullable=False)
     prenom = db.Column(db.String(45), nullable=False)
     nom = db.Column(db.String(45), nullable=False)
-    region_id = db.Column(db.Integer, db.ForeignKey('regions.id'), nullable=False)
-    compte_id = db.Column(db.Integer,db.ForeignKey('comptes.id'),nullable=False)
+    region_id = db.Column(db.Integer, db.ForeignKey(
+        'regions.id'), nullable=False)
+    compte_id = db.Column(db.Integer, db.ForeignKey(
+        'comptes.id'), nullable=False)
+    erreurs = {}
 
     def __repr__(self):
         return 'Nom: %s' % (self.nom[0]+self.prenom[0])
 
-    def __init__(self, date, prenom, nom, region_id, compte_id):
-        self.date = date
+    def __init__(self, prenom, nom, region, compte):
+        self.date = dt.datetime.now().timestamp()
         self.prenom = prenom
         self.nom = nom
-        self.region_id = region_id
-        self.compte_id = compte_id
+        self.region_id = region
+        self.compte_id = compte
+        self.valider()
 
     def valider(self):
         """
         Valide la création d'un cas.
         """
-        erreurs = []
         if self.nom is None or self.nom == "":
-            erreurs["nom"] = "Le nom est obligatoire"
+            self.erreurs["nom"] = "Le nom est obligatoire"
         elif len(self.nom) > 45:
-            erreurs["nom"] = "Le nom ne doit pas avoir plus de 45 caractères"
+            self.erreurs["nom"] = "Le nom ne doit pas avoir plus de 45 caractères"
         if self.prenom is None or self.prenom == "":
-            erreurs["prenom"] = "Le prenom est obligatoire"
+            self.erreurs["prenom"] = "Le prenom est obligatoire"
         elif len(self.prenom) > 45:
-            erreurs["prenom"] = "Le prenom ne doit pas avoir plus de 45 caractères"
-        if self.region is None or self.region == "":
-            erreurs["region"] = "La région est requise"
+            self.erreurs["prenom"] = "Le prenom ne doit pas avoir plus de 45 caractères"
+        if self.region_id is None or self.region_id == "":
+            self.erreurs["region"] = "La région est requise"
         else:
-            region = Region.query.get(self.region)
+            region = Regions.query.get(self.region_id)
             if region is None:
-                erreurs["region"] = "La région est requise et doit être l'une des régions de la liste"
-
-        return erreurs
+                self.erreurs["region"] = "La région est requise et doit être l'une des régions de la liste"

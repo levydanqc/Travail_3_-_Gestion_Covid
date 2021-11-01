@@ -14,13 +14,13 @@ def index():
 
 
 @routes.route('/liste/regions')
-def afficher_cas(id):
+def liste_region(id):
     cas = Cas.query.get(id)
     return render_template('liste_region.html', cas=cas)
 
 
 @routes.route('/liste/admin')
-def afficher_cas(id):
+def liste_admin(id):
     cas = Cas.query.get(id)
     return render_template('liste_admin.html', cas=cas)
 
@@ -32,17 +32,16 @@ def creer_cas():
             nom=request.form.get('nom'),
             prenom=request.form.get('prenom'),
             region=request.form.get('region'),
-            compte=request.form.get('compte'),
-            date=request.form.get('date'),
+            compte=0,
         )
-        erreurs = cas.valider()
+        erreurs = cas.erreurs
         if len(erreurs) > 0:
             # flash(erreurs, 'danger')
             return render_template('saisie.html', cas=cas, messages=erreurs, regions=Regions.query.order_by(Regions.nom).all())
         db.session.add(cas)
         db.session.commit()
         # flash('Cas créé avec succès !')
-        return redirect(url_for('afficher_cas', id=request.form.get('id')))
+        return redirect(url_for('creer_cas'))
     return render_template('saisie.html', regions=Regions.query.order_by(Regions.nom).all())
 
 
