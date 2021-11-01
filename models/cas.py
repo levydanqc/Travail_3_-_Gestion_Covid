@@ -10,7 +10,7 @@ class Cas(db.Model):
     prenom = db.Column(db.String(45), nullable=False)
     nom = db.Column(db.String(45), nullable=False)
     region_id = db.Column(db.Integer, db.ForeignKey('regions.id'), nullable=False)
-    compte_id = db.Column(db.Integer,nullable=False)
+    compte_id = db.Column(db.Integer,db.ForeignKey('comptes.id'),nullable=False)
 
     def __repr__(self):
         return 'Nom: %s' % (self.nom[0]+self.prenom[0])
@@ -31,6 +31,10 @@ class Cas(db.Model):
             erreurs["nom"] = "Le nom est obligatoire"
         elif len(self.nom) > 45:
             erreurs["nom"] = "Le nom ne doit pas avoir plus de 45 caractères"
+        if self.prenom is None or self.prenom == "":
+            erreurs["prenom"] = "Le prenom est obligatoire"
+        elif len(self.prenom) > 45:
+            erreurs["prenom"] = "Le prenom ne doit pas avoir plus de 45 caractères"
         if self.region is None or self.region == "":
             erreurs["region"] = "La région est requise"
         else:
