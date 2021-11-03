@@ -9,5 +9,9 @@ class Comptes(db.Model):
     compte = db.Column(db.String(45), unique=True, nullable=False)
     cas = db.relationship('Cas', backref='comptes', lazy=True)
 
+    def __init__(self, username, password):
+        self.compte = username + ':' + password
+        self.admin = False
+        
     def __repr__(self):
         return 'Compte: %s' % (self.compte)

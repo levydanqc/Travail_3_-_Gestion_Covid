@@ -1,5 +1,5 @@
 from bd import db
-from models.regions import Regions
+from blueprint.cas.models.regions import Regions
 import datetime as dt
 
 

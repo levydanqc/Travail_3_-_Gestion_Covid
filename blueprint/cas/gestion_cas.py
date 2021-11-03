@@ -1,31 +1,29 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-
-from models.cas import Cas
-from models.regions import Regions
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from sqlalchemy import func
 from bd import db
+from blueprint.cas.models.cas import Cas
+from blueprint.cas.models.cas import Regions
 
-routes = Blueprint('gestion_cas', __name__,
-                   url_prefix='/gestion_cas', template_folder='templates')
-
-
-@routes.route('/')
-def index():
-    return render_template('index.html')
+routes_cas = Blueprint('gestion_cas', __name__,
+                       url_prefix='/cas', template_folder='templates')
 
 
-@routes.route('/liste/regions')
-def liste_region(id):
-    cas = Cas.query.get(id)
-    return render_template('liste_region.html', cas=cas)
+@routes_cas.route('/accueil')
+def accueil():
+    regions = Regions.query.all()
+    cas = {}
+    for region in regions:
+        cas[region.nom] = Cas.query.filter_by(region_id=region.id).count()
+    return render_template('liste_region.html', cas=cas, connected=session['compte'])
 
 
-@routes.route('/liste/admin')
-def liste_admin(id):
-    cas = Cas.query.get(id)
+@routes_cas.route('/cas')
+def liste_admin():
+    cas = Cas.query.all()
     return render_template('liste_admin.html', cas=cas)
 
 
-@routes.route('/creer', methods=['GET', 'POST'])
+@routes_cas.route('/creer', methods=['GET', 'POST'])
 def creer_cas():
     if request.method == 'POST':
         cas = Cas(
@@ -42,10 +40,10 @@ def creer_cas():
         db.session.commit()
         # flash('Cas créé avec succès !')
         return redirect(url_for('creer_cas'))
-    return render_template('saisie.html', regions=Regions.query.order_by(Regions.nom).all())
+    return render_template('saisie.html', regions=Regions.query.order_by(Regions.nom).all(), connected=g.connected)
 
 
-@routes.route('/<int:id>/modifier')
+@routes_cas.route('/<int:id>/modifier')
 def modifier_cas(id):
     cas = Cas.query.get(id)
     if cas is None:

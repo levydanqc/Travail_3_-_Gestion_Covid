@@ -16,37 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `cas`
---
-
-DROP TABLE IF EXISTS `cas`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `cas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `date` date DEFAULT NULL,
-  `prenom` varchar(45) DEFAULT NULL,
-  `nom` varchar(45) DEFAULT NULL,
-  `region_id` int(11) NOT NULL,
-  `compte_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_region_idx` (`region_id`),
-  CONSTRAINT `FK_region` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-  KEY `FK_compte_idx` (`compte_id`),
-  CONSTRAINT `FK_compte` FOREIGN KEY (`compte_id`) REFERENCES `comptes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `cas`
---
-
-LOCK TABLES `cas` WRITE;
-/*!40000 ALTER TABLE `cas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cas` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `regions`
 --
 
@@ -81,8 +50,9 @@ DROP TABLE IF EXISTS `comptes`;
 CREATE TABLE `comptes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `compte` varchar(45) DEFAULT NULL,
+  `password` varchar(45) DEFAULT NULL,
   `admin` tinyint DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -95,6 +65,38 @@ LOCK TABLES `comptes` WRITE;
 -- INSERT INTO `comptes` VALUES (null,'01','Bas-Saint-Laurent');
 /*!40000 ALTER TABLE `comptes` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `cas`
+--
+
+DROP TABLE IF EXISTS `cas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` date DEFAULT NULL,
+  `prenom` varchar(45) DEFAULT NULL,
+  `nom` varchar(45) DEFAULT NULL,
+  `region_id` int(11) NOT NULL,
+  `compte_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_region_idx` (`region_id`),
+  CONSTRAINT `FK_region` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `FK_compte_idx` (`compte_id`),
+  CONSTRAINT `FK_compte` FOREIGN KEY (`compte_id`) REFERENCES `comptes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cas`
+--
+
+LOCK TABLES `cas` WRITE;
+/*!40000 ALTER TABLE `cas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cas` ENABLE KEYS */;
+UNLOCK TABLES;
+
 
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

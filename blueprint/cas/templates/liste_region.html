@@ -1,0 +1,25 @@
+{% extends "master.html" %}
+{% block title %}Liste - Région{% endblock %}
+
+{% block content %}
+{% if cas is not defined %}
+{% set cas = {} %}
+{% endif %}
+
+<h1>Liste des cas</h1>
+<p>Note : ces nombres doivent être régionalisés</p>
+<table class="table">
+  <tr>
+    <th>Région</th>
+    <th>Nombre</th>
+  </tr>
+  {% for region, nb in cas.items() %}
+  <tr>
+    <td>{{region}}</td>
+    <td>{{nb}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+
+{% endblock %}

@@ -16,9 +16,9 @@
   {% endblock %}
 </head>
 
-<main class="container">
+<body class="container">
 
-  <header>
+  <header class="d-flex justify-content-between align-items-center border-bottom border-dark">
     <nav>
       <ul class="nav">
         <li class="nav-item">
@@ -32,10 +32,31 @@
         </li>
       </ul>
     </nav>
+
+    <nav>
+      {% if connected %}
+      <!-- formulaire de deconnexion -->
+      <form action="/logout" method="post" class="mb-3">
+        <button type="submit" class="btn btn-outline-danger">Déconnexion</button>
+      </form>
+      {% else %}
+      <!-- formulaire de connexion -->
+      <form action="/login" method="post" class="d-flex align-items-end mb-3">
+        <div class="form-group my-0 mx-2">
+          <label for="login">Login</label>
+          <input type="text" class="form-control" id="login" name="login">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <button type="submit" class="btn btn-outline-success align-self-bottom">Connexion</button>
+      </form>
+      {% endif %}
+    </nav>
   </header>
 
-
-  {% block content %}{% endblock %}
+  <main class="container my-3">
+    {% block content %}{% endblock %}
+  </main>
 
 
   <!-- Optional JavaScript -->
@@ -49,6 +70,6 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"></script>
-</main>
+</body>
 
 </html>
