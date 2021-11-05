@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from sqlalchemy import func
-from blueprint.comptes.comptes import Comptes
 from bd import db
 
 routes_erreurs = Blueprint('gestion_erreurs', __name__)

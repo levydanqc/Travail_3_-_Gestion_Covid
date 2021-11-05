@@ -1,3 +1,19 @@
+{% if session['loginErreurs'] is defined %}
+
+{% set loginErreurs = session.pop("loginErreurs", None) %}
+{% set signupErreurs = {} %}
+
+{% elif session['signupErreurs'] is defined %}
+
+{% set signupErreurs = session.pop("signupErreurs", None) %}
+{% set loginErreurs = {} %}
+
+{% else %}
+
+{% set loginErreurs = {} %}
+{% set signupErreurs = {} %}
+
+{% endif %}
 <!doctype html>
 <html lang="fr" xmlns="http://www.w3.org/1999/xhtml">
 
@@ -9,10 +25,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <title>{% block title %}{% endblock %}</title>
+
+  <script src="{{ url_for('static', filename='index.js') }}"></script>
+
   {% endblock %}
 </head>
 
@@ -22,34 +40,27 @@
     <nav>
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link" href="liste_region.html">Liste des cas par région</a>
+          <a class="nav-link" href="/cas/cas">Liste des cas par région</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="liste_admin.html">Liste des cas</a>
+          <a class="nav-link" href="/">Liste des cas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="creer">Saisir un cas</a>
+          <a class="nav-link" href="/cas/creer">Saisir un cas</a>
         </li>
       </ul>
     </nav>
 
-    <nav>
-      {% if connected %}
-      <!-- formulaire de deconnexion -->
-      <form action="/logout" method="post" class="mb-3">
+    <nav class="my-3">
+      {% if session["connected"] %}
+      <form action="/logout">
         <button type="submit" class="btn btn-outline-danger">Déconnexion</button>
       </form>
       {% else %}
-      <!-- formulaire de connexion -->
-      <form action="/login" method="post" class="d-flex align-items-end mb-3">
-        <div class="form-group my-0 mx-2">
-          <label for="login">Login</label>
-          <input type="text" class="form-control" id="login" name="login">
-          <label for="password">Password</label>
-          <input type="password" class="form-control" id="password" name="password">
-        </div>
-        <button type="submit" class="btn btn-outline-success align-self-bottom">Connexion</button>
-      </form>
+      <button type="button" class="mx-2 btn btn-outline-success" data-bs-toggle="modal"
+        data-bs-target="#connexionModal">Connexion</button>
+      <button type="button" class="mx-2 btn btn-outline-warning" data-bs-toggle="modal"
+        data-bs-target="#inscriptionModal">Inscription</button>
       {% endif %}
     </nav>
   </header>
@@ -59,17 +70,100 @@
   </main>
 
 
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+  <div class="modal fade in" id="connexionModal" tabindex="-1" role="dialog" aria-labelledby="connexionModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="connexionModalLabel">Connexion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-danger m-0">{{loginErreurs["username"] if loginErreurs["username"] is defined else ''}}</p>
+          <form action="{{ url_for('gestion_comptes.login') }}" method="post" id="connexionForm">
+            <div class="form-group mx-2 my-3">
+              <label for="cologin">Email</label>
+              <input type="text" class="form-control" id="cologin" name="username">
+            </div>
+            <div class="form-group mx-2 my-3">
+              <label for="coPassword">Password</label>
+              <input type="password" class="form-control" id="coPassword" name="password">
+            </div>
+            <div class="form-check mx-2 my-3 mt-2">
+              <input type="checkbox" class="form-check-input" id="coRememberMe" name="rememberMe">
+              <label class="form-check-label" for="coRememberMe">Se souvenir de moi</label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <a href="#" onclick="openModal('inscriptionModal')" class="btn btn-outline-warning">Créer un compte</a>
+          <button form="connexionForm" type="submit" class="btn btn-success align-self-bottom">Connexion</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade in" id="inscriptionModal" tabindex="-1" role="dialog" aria-labelledby="inscriptionModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="inscriptionModalLabel">Inscription</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ url_for('gestion_comptes.signup') }}" method="post" id="inscriptionForm">
+            <div class="form-group mx-2 my-3">
+              <label for="login">Email</label>
+              <input type="text" class="form-control" id="login" name="username">
+              <p class="text-danger m-0">{{signupErreurs["username"] if signupErreurs["username"] is defined else ''}}
+              </p>
+            </div>
+            <div class="form-group mx-2 my-3">
+              <label for="password">Mot de passe</label>
+              <input type="password" class="form-control" id="password" name="password">
+              <p class="text-danger m-0">{{signupErreurs["password"] if signupErreurs["password"] is defined else ''}}
+              </p>
+            </div>
+            <div class="form-group mx-2 my-3">
+              <label for="password">Confimer le mot de passe</label>
+              <input type="password" class="form-control" id="confirm" name="confirm">
+              <p class="text-danger m-0">{{signupErreurs["confirm"] if signupErreurs["confirm"] is defined else ''}}</p>
+            </div>
+            <div class="form-check mx-2 mt-2">
+              <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
+              <label class="form-check-label" for="rememberMe">Se souvenir de moi</label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <a href="#" onclick="openModal('connexionModal')" class="btn btn-outline-success">Se connecter</a>
+          <button form="inscriptionForm" type="submit" class="btn btn-warning align-self-bottom">Inscription</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+    integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
     crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
     crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-    crossorigin="anonymous"></script>
+
+
+
+  {% if session["connected"] and signupErreurs != {} %}
+  <script type="text/javascript">
+    openModal('inscriptionModal')
+  </script>
+  {% elif not session["connected"] %}
+  <script type="text/javascript">
+    openModal('connexionModal')
+  </script>
+  {% endif %}
 </body>
 
 </html>

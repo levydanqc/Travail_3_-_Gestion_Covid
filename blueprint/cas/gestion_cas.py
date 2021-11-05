@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from sqlalchemy import func
 from bd import db
 from blueprint.cas.models.cas import Cas
 from blueprint.cas.models.cas import Regions
@@ -8,13 +7,13 @@ routes_cas = Blueprint('gestion_cas', __name__,
                        url_prefix='/cas', template_folder='templates')
 
 
-@routes_cas.route('/accueil')
+@routes_cas.route('/')
 def accueil():
     regions = Regions.query.all()
     cas = {}
     for region in regions:
         cas[region.nom] = Cas.query.filter_by(region_id=region.id).count()
-    return render_template('liste_region.html', cas=cas, connected=session['compte'])
+    return render_template('liste_region.html', cas=cas)
 
 
 @routes_cas.route('/cas')
@@ -32,15 +31,14 @@ def creer_cas():
             region=request.form.get('region'),
             compte=0,
         )
-        erreurs = cas.erreurs
-        if len(erreurs) > 0:
+        if len(cas.erreurs) > 0:
             # flash(erreurs, 'danger')
-            return render_template('saisie.html', cas=cas, messages=erreurs, regions=Regions.query.order_by(Regions.nom).all())
+            return render_template('saisie.html', cas=cas, messages=cas.erreurs, regions=Regions.query.order_by(Regions.nom).all())
         db.session.add(cas)
         db.session.commit()
         # flash('Cas créé avec succès !')
         return redirect(url_for('creer_cas'))
-    return render_template('saisie.html', regions=Regions.query.order_by(Regions.nom).all(), connected=g.connected)
+    return render_template('saisie.html', regions=Regions.query.order_by(Regions.nom).all(), connected=session.get('connected'))
 
 
 @routes_cas.route('/<int:id>/modifier')

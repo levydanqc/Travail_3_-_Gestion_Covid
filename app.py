@@ -27,7 +27,6 @@ app = create_app()
 
 @app.route('/')
 def index():
-    session['compte'] = False
     return redirect(url_for('gestion_cas.accueil'))
 
 
