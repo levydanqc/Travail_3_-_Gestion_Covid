@@ -7,7 +7,7 @@ class Cas(db.Model):
     __tablename__ = "cas"
 
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date, nullable=False)
+    date = db.Column(db.DateTime, nullable=False)
     prenom = db.Column(db.String(45), nullable=False)
     nom = db.Column(db.String(45), nullable=False)
     region_id = db.Column(db.Integer, db.ForeignKey(
@@ -17,12 +17,13 @@ class Cas(db.Model):
     erreurs = {}
 
     def __repr__(self):
-        return 'Nom: %s' % (self.nom[0]+self.prenom[0])
+        return self.prenom[0]+self.nom[0]
 
     def __init__(self, prenom, nom, region, compte):
-        self.date = dt.datetime.now().timestamp()
-        self.prenom = prenom
-        self.nom = nom
+        self.erreurs = {}
+        self.date = dt.datetime.now()
+        self.prenom = prenom.capitalize()
+        self.nom = nom.capitalize()
         self.region_id = region
         self.compte_id = compte
         self.valider()

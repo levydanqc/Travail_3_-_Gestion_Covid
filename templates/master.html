@@ -53,7 +53,7 @@
 
     <nav class="my-3">
       {% if session["connected"] %}
-      <form action="/logout">
+      <form action="/comptes/logout" method="post">
         <button type="submit" class="btn btn-outline-danger">Déconnexion</button>
       </form>
       {% else %}
@@ -159,7 +159,7 @@
   <script type="text/javascript">
     openModal('inscriptionModal')
   </script>
-  {% elif not session["connected"] %}
+  {% elif not session["connected"] and loginErreurs != {}%}
   <script type="text/javascript">
     openModal('connexionModal')
   </script>

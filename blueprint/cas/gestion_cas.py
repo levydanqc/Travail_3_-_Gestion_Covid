@@ -19,7 +19,7 @@ def accueil():
 @routes_cas.route('/cas')
 def liste_admin():
     cas = Cas.query.all()
-    return render_template('liste_admin.html', cas=cas)
+    return render_template('liste_admin.html', lesCas=cas, regions=Regions)
 
 
 @routes_cas.route('/creer', methods=['GET', 'POST'])
@@ -29,7 +29,7 @@ def creer_cas():
             nom=request.form.get('nom'),
             prenom=request.form.get('prenom'),
             region=request.form.get('region'),
-            compte=0,
+            compte=2,
         )
         if len(cas.erreurs) > 0:
             # flash(erreurs, 'danger')
@@ -37,23 +37,15 @@ def creer_cas():
         db.session.add(cas)
         db.session.commit()
         # flash('Cas créé avec succès !')
-        return redirect(url_for('creer_cas'))
+        return redirect('/cas/creer', code=302)
     return render_template('saisie.html', regions=Regions.query.order_by(Regions.nom).all(), connected=session.get('connected'))
 
 
-@routes_cas.route('/<int:id>/modifier')
-def modifier_cas(id):
-    cas = Cas.query.get(id)
-    if cas is None:
-        return redirect(url_for('accueil'), code=404)
+@routes_cas.route('/<int:id>/delete', methods=['GET', 'POST'])
+def supprimer_cas(id):
     if request.method == 'POST':
-        cas.titre = request.form['titre']
-        cas.description = request.form['description']
-        cas.date_creation = request.form['date_creation']
-        cas.date_cloture = request.form['date_cloture']
-        cas.etat = request.form['etat']
-        cas.id_utilisateur = request.form['id_utilisateur']
+        id = 5
+        Cas.query.filter_by(id=id).delete()
         db.session.commit()
-        # flash('Cas modifié avec succès !')
-        return redirect(url_for('gestion_cas.afficher_cas', id=cas.id))
-    return render_template('modifier_cas.html', cas=cas)
+        return redirect(request.referrer if request.referrer else '/')
+    return redirect(request.referrer if request.referrer else '/')

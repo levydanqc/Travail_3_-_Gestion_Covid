@@ -1,6 +1,10 @@
 {% extends "master.html" %}
 {% block title %}Liste - Admin{% endblock %}
 
+{% if lesCas is not defined %}
+{% set lesCas = {} %}
+{% endif %}
+
 {% block content %}
 <h1>Liste des cas</h1>
 <table class='table'>
@@ -10,18 +14,16 @@
     <th>Initiales</th>
     <th>Action</th>
   </tr>
-  <tr>
-    <td>2020-11-08</td>
-    <td>Capitale-Nationale</td>
-    <td>PF</td>
-    <td><a href='#'>Supprimer</a></td>
-  </tr>
-  <tr>
-    <td>2020-12-08</td>
-    <td>Capitale-Nationale</td>
-    <td>JJ</td>
-    <td><a href='#'>Supprimer</a></td>
-  </tr>
+  <form method="post">
+    {% for cas in lesCas %}
+    <tr>
+      <td>{{cas.date}}</td>
+      <td>{{regions.query.filter_by(id=cas.region_id).first().nom}}</td>
+      <td>{{cas}}</td>
+      <td><button formaction="/cas/{{cas.id}}/delete" type="submit">Supprimer</button></td>
+    </tr>
+    {% endfor %}
+  </form>
 </table>
 
 
