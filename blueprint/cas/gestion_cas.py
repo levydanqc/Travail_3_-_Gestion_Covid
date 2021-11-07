@@ -31,7 +31,7 @@ def creer_cas():
             nom=request.form.get('nom'),
             prenom=request.form.get('prenom'),
             region=request.form.get('region'),
-            compte=2,
+            compte=session.get('compte_id'),
         )
         if len(cas.erreurs) > 0:
             # flash(erreurs, 'danger')

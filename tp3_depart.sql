@@ -62,7 +62,7 @@ CREATE TABLE `comptes` (
 
 LOCK TABLES `comptes` WRITE;
 /*!40000 ALTER TABLE `comptes` DISABLE KEYS */;
--- INSERT INTO `comptes` VALUES (null,'01','Bas-Saint-Laurent');
+INSERT INTO `comptes` VALUES (null,'danlevy','danlevy', 1);
 /*!40000 ALTER TABLE `comptes` ENABLE KEYS */;
 UNLOCK TABLES;
 

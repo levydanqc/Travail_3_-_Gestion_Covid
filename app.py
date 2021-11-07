@@ -12,7 +12,6 @@ from blueprint.gestion_erreurs import routes_erreurs
 def create_app():
     app = Flask(__name__, template_folder='templates')
     app.config.from_object(config.DevelopmentConfig)
-    app.wsgi_app = SessionMiddleware(app.wsgi_app, prefix='/gestion_covid')
     app.register_blueprint(routes_cas)
     app.register_blueprint(routes_comptes)
     app.register_blueprint(routes_erreurs)
