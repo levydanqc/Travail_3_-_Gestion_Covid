@@ -44,13 +44,13 @@
     <nav>
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link" href="/cas/cas">Liste des cas par région</a>
+          <a class="nav-link" href="{{ url_for('gestion_cas.liste_admin') }}">Liste des cas par région</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/">Liste des cas</a>
+          <a class="nav-link" href="{{ url_for('gestion_cas.accueil') }}">Liste des cas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/cas/creer">Saisir un cas</a>
+          <a class="nav-link" href="{{ url_for('gestion_cas.creer_cas') }}">Saisir un cas</a>
         </li>
       </ul>
     </nav>
@@ -68,7 +68,7 @@
         data-bs-target="#inscriptionModal">Inscription</button>
       {% endif %}
 
-      <a href="{% 'fr' if lang == 'en' else 'en' %}">{{lang}}</a>
+      <a href="{{ url_for('fr') if lang == 'en' else url_for('en') }}">{{lang}}</a>
 
     </nav>
 
