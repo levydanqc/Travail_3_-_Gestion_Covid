@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from bd import db
 from blueprint.cas.models.cas import Cas
 from blueprint.cas.models.cas import Regions
+from babel.dates import format_date
+from babel.numbers import format_number
 
 routes_cas = Blueprint('gestion_cas', __name__,
                        url_prefix='/cas', template_folder='templates')
@@ -13,7 +15,7 @@ def accueil():
     cas = {}
     for region in regions:
         cas[region.nom] = Cas.query.filter_by(region_id=region.id).count()
-    return render_template('liste_region.html', cas=cas)
+    return render_template('liste_region.html', cas=cas, )
 
 
 @routes_cas.route('/cas')
@@ -47,5 +49,5 @@ def supprimer_cas(id):
         id = 5
         Cas.query.filter_by(id=id).delete()
         db.session.commit()
-        return redirect(request.referrer if request.referrer else '/')
-    return redirect(request.referrer if request.referrer else '/')
+        return redirect(request.referrer or '/')
+    return redirect(request.referrer or '/')

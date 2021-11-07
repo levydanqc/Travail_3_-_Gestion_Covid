@@ -13,7 +13,7 @@ def signup():
                          password=request.form.get('password'), confirm=request.form.get('confirm'))
         if len(compte.erreurs) > 0:
             session['signupErreurs'] = compte.erreurs
-            return redirect(request.referrer if request.referrer else '/')
+            return redirect(request.referrer or '/')
         db.session.add(compte)
         db.session.commit()
         session['connected'] = True
@@ -22,8 +22,8 @@ def signup():
             session.permanent = True
         else:
             session.permanent = False
-        return redirect(request.referrer if request.referrer else '/')
-    return redirect(request.referrer if request.referrer else '/')
+        return redirect(request.referrer or '/')
+    return redirect(request.referrer or '/')
 
 
 @routes_comptes.route('/login', methods=['GET', 'POST'])
@@ -36,19 +36,19 @@ def login():
             erreurs["username"] = "Le nom d'utilisateur ou le mot de passe n'est pas valide"
         if len(erreurs) > 0:
             session['loginErreurs'] = erreurs
-            return redirect(request.referrer if request.referrer else '/')
+            return redirect(request.referrer or '/')
         session['connected'] = True
         session['compte_id'] = compte.id
         if request.form.get('rememberMe') == 'on':
             session.permanent = True
         else:
             session.permanent = False
-    return redirect(request.referrer if request.referrer else '/')
+    return redirect(request.referrer or '/')
 
 
 @routes_comptes.route('/logout', methods=['GET', 'POST'])
 def logout():
     if request.method == 'POST':
         session.clear()
-        return redirect(request.referrer if request.referrer else '/')
-    return redirect(request.referrer if request.referrer else '/')
+        return redirect(request.referrer or '/')
+    return redirect(request.referrer or '/')
