@@ -43,6 +43,8 @@ def login():
             session.permanent = True
         else:
             session.permanent = False
+
+        return redirect(session.get('url') or url_for('gestion_cas.list_admin'))
     return redirect(request.referrer or '/')
 
 

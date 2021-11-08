@@ -61,7 +61,7 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('gestion_cas.accueil') }}">Liste des cas</a>
         </li>
-        {% if session.get('admin') %}
+        {% if session.get('compte_id') %}
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('gestion_cas.liste_admin') }}">Liste des cas par région</a>
         </li>

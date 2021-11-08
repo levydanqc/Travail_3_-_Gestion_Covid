@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, abort, session
-from flask.helpers import flash
+from flask.helpers import flash, url_for
 from bd import db
 from blueprint.cas.models.cas import Cas
 from blueprint.cas.models.cas import Regions
@@ -19,6 +19,9 @@ def accueil():
 @ routes_cas.route('/')
 def liste_admin():
     if not session.get('admin'):
+        session['loginErreurs'] = {
+            "username": "Vous devez être authentifié pour accéder à cette page"}
+        session['url'] = url_for('gestion_cas.liste_admin')
         abort(403)
     cas = Cas.query.all()
     return render_template('liste_admin.html', lesCas=cas, regions=Regions, date=format_date)
@@ -27,6 +30,9 @@ def liste_admin():
 @ routes_cas.route('/creer', methods=['GET', 'POST'])
 def creer_cas():
     if not session.get('compte_id'):
+        session['loginErreurs'] = {
+            "username": "Vous devez être authentifié pour accéder à cette page"}
+        session['url'] = url_for('gestion_cas.creer_cas')
         abort(401)
     if request.method == 'POST':
         cas = Cas(
@@ -47,8 +53,10 @@ def creer_cas():
 @ routes_cas.route('/<int:id>/delete', methods=['GET', 'POST'])
 def supprimer_cas(id):
     if not session.get('compte_id'):
+        session['url'] = url_for('gestion_cas.supprimer_cas')
         abort(401)
     if not session.get('admin'):
+        session['url'] = url_for('gestion_cas.supprimer_cas')
         abort(403)
     if request.method == 'POST':
         Cas.query.filter_by(id=id).delete()

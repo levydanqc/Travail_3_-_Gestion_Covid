@@ -20,13 +20,14 @@
       <td>{{date(cas.date, locale=lang)}}</td>
       <td>{{regions.query.filter_by(id=cas.region_id).first().nom}}</td>
       <td>{{cas}}</td>
+      {% if session.get('admin') %}
       <td>
         <button formaction="{{ url_for('gestion_cas.supprimer_cas', id=cas.id) }}" type="submit">Supprimer</button>
       </td>
+      {% endif %}
     </tr>
     {% endfor %}
   </form>
 </table>
-
 
 {% endblock %}
