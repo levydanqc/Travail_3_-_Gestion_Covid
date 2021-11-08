@@ -15,7 +15,7 @@
 
 {% endif %}
 
-{% set lang = session.get('lang') or config.get('DEFAULT_LOCALE') %}
+{% set lang = request.cookies.get('lang') or config.get('DEFAULT_LOCALE') %}
 
 
 <!doctype html>
@@ -44,20 +44,22 @@
     <nav>
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('gestion_cas.liste_admin') }}">Liste des cas par région</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" href="{{ url_for('gestion_cas.accueil') }}">Liste des cas</a>
+        </li>
+        {% if session.get('admin') %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('gestion_cas.liste_admin') }}">Liste des cas par région</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('gestion_cas.creer_cas') }}">Saisir un cas</a>
         </li>
+        {% endif %}
       </ul>
     </nav>
 
 
-    <nav class="my-3">
-      {% if session["connected"] %}
+    <nav class="my-3 d-flex">
+      {% if session["compte_id"] %}
       <form action="/comptes/logout" method="post">
         <button type="submit" class="btn btn-outline-danger">Déconnexion</button>
       </form>
@@ -68,12 +70,13 @@
         data-bs-target="#inscriptionModal">Inscription</button>
       {% endif %}
 
-      <a href="{{ url_for('fr') if lang == 'en' else url_for('en') }}">{{lang}}</a>
-
+      <a href="{{ url_for('fr') if lang == 'en_CA' else url_for('en') }}" class="mx-3 btn btn-info">{{lang}}</a>
     </nav>
 
 
   </header>
+
+  <p>{{session.get('date')}}</p>
 
   <main class="container my-3">
     {% block content %}{% endblock %}
@@ -163,13 +166,11 @@
     integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
     crossorigin="anonymous"></script>
 
-
-
-  {% if session["connected"] and signupErreurs != {} %}
+  {% if not session["compte_id"] and signupErreurs != {} %}
   <script type="text/javascript">
     openModal('inscriptionModal')
   </script>
-  {% elif not session["connected"] and loginErreurs != {}%}
+  {% elif not session["compte_id"] and loginErreurs != {}%}
   <script type="text/javascript">
     openModal('connexionModal')
   </script>

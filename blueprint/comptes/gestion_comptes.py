@@ -16,8 +16,8 @@ def signup():
             return redirect(request.referrer or '/')
         db.session.add(compte)
         db.session.commit()
-        session['connected'] = True
         session['compte_id'] = compte.id
+        session['admin'] = compte.admin
         if request.form.get('rememberMe') == 'on':
             session.permanent = True
         else:
@@ -37,8 +37,8 @@ def login():
         if len(erreurs) > 0:
             session['loginErreurs'] = erreurs
             return redirect(request.referrer or '/')
-        session['connected'] = True
         session['compte_id'] = compte.id
+        session['admin'] = compte.admin
         if request.form.get('rememberMe') == 'on':
             session.permanent = True
         else:
