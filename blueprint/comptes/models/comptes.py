@@ -1,5 +1,6 @@
 from bd import db
 import re
+import hashlib
 
 
 class Comptes(db.Model):
@@ -15,10 +16,13 @@ class Comptes(db.Model):
 
     def __init__(self, username, password, confirm):
         self.erreurs = {}
-        self.compte = username
-        self.password = password
-        self.admin = False
         self.valider(confirm)
+        self.compte = username
+        self.password = self.hash_pwd(password)
+        self.admin = False
+
+    def hash_pwd(password):
+        return hashlib.sha256(password.encode()).hexdigest()
 
     def valider(self, confirm):
         if Comptes.query.filter_by(compte=self.compte).first():

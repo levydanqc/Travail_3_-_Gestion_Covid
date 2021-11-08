@@ -18,7 +18,7 @@ def accueil():
 
 @ routes_cas.route('/')
 def liste_admin():
-    if not session.get('admin'):
+    if not session.get('compte_id'):
         session['loginErreurs'] = {
             "username": "Vous devez être authentifié pour accéder à cette page"}
         session['url'] = url_for('gestion_cas.liste_admin')

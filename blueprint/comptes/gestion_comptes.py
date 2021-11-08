@@ -31,7 +31,7 @@ def login():
     if request.method == 'POST':
         erreurs = {}
         compte = Comptes.query.filter_by(compte=request.form.get(
-            'username'), password=request.form.get('password')).first()
+            'username'), password=Comptes.hash_pwd(request.form.get('password'))).first()
         if compte is None:
             erreurs["username"] = "Le nom d'utilisateur ou le mot de passe n'est pas valide"
         if len(erreurs) > 0:
@@ -44,7 +44,7 @@ def login():
         else:
             session.permanent = False
 
-        return redirect(session.get('url') or url_for('gestion_cas.list_admin'))
+        return redirect(session.get('url') or url_for('gestion_cas.liste_admin'))
     return redirect(request.referrer or '/')
 
 
@@ -52,5 +52,5 @@ def login():
 def logout():
     if request.method == 'POST':
         session.clear()
-        return redirect(request.referrer or '/')
-    return redirect(request.referrer or '/')
+        return redirect('/')
+    return redirect('/')

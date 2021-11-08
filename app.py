@@ -1,7 +1,6 @@
 from flask import Flask, request, session
 from flask.helpers import make_response, url_for
 from werkzeug.utils import redirect
-from werkzeug.wrappers import response
 import config
 from bd import db
 from blueprint.cas.gestion_cas import routes_cas
@@ -9,7 +8,6 @@ from blueprint.comptes.gestion_comptes import routes_comptes
 from blueprint.erreurs.gestion_erreurs import routes_erreurs
 from babel.dates import format_date
 from datetime import datetime
-
 
 def create_app():
     app = Flask(__name__, template_folder='templates')
