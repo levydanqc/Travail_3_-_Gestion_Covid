@@ -62,7 +62,7 @@ CREATE TABLE `comptes` (
 
 LOCK TABLES `comptes` WRITE;
 /*!40000 ALTER TABLE `comptes` DISABLE KEYS */;
-INSERT INTO `comptes` VALUES (null,'danlevy','danlevy', 1);
+INSERT INTO `comptes` VALUES (null,'utilisateur_admin','motdepasse', 1), (null,'utilisateur_normal','motdepasse', 0);
 /*!40000 ALTER TABLE `comptes` ENABLE KEYS */;
 UNLOCK TABLES;
 

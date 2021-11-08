@@ -13,7 +13,7 @@
 {% set messages = {} %}
 {% endif %}
 
-
+{% if regions is defined %}
 <h1>Saisie</h1>
 <form method="POST" novalidate="novalidate">
   <div class="form-group">
@@ -41,5 +41,11 @@
 
   <button type="submit" class="btn btn-primary">Envoyer</button>
 </form>
+{% else %}
+<h1 class="my-5">Cas créé avec succès!</h1>
+
+<a href="{{ url_for('gestion_cas.accueil') }}" class="btn btn-outline-dark">Afficher la liste des cas</a>
+<a href="{{ url_for('gestion_cas.creer_cas') }}" class="btn btn-outline-primary">Créer un nouveau cas</a>
+{% endif %}
 
 {% endblock %}
