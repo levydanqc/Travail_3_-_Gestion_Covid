@@ -22,7 +22,7 @@ class Comptes(db.Model):
         self.admin = False
 
     def hash_pwd(password):
-        return hashlib.sha256(password.encode()).hexdigest()
+        return hashlib.sha256(password.encode()).hexdigest()[:45]
 
     def valider(self, confirm):
         if Comptes.query.filter_by(compte=self.compte).first():

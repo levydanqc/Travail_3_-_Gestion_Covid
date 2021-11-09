@@ -85,7 +85,8 @@
         data-bs-target="#inscriptionModal">Inscription</button>
       {% endif %}
 
-      <a href="{{ url_for('fr') if lang == 'en_CA' else url_for('en') }}" class="mx-3 btn btn-info">{{ lang }}</a>
+      <a href="{{ url_for('fr') if lang == 'en_CA' else url_for('en') }}" class="mx-3 btn btn-info">{{ 'fr' if lang ==
+        'en_CA' else 'en' }}</a>
     </nav>
 
 
