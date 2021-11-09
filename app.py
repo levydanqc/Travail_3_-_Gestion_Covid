@@ -29,8 +29,9 @@ app = create_app()
 
 
 def refresh_date():
-    session['date'] = format_date(datetime.today(), format='medium', locale=(
-        request.cookies.get('lang') or config['DEFAULT_LOCALE']))
+    lang = request.cookies.get('lang') or config['DEFAULT_LOCALE']
+    session['date'] = format_date(
+        datetime.today(), format='medium', locale=lang)
 
 
 @app.route('/')
