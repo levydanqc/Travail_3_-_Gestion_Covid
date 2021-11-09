@@ -1,10 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
+from flask import Blueprint, request, redirect, url_for, session
 from blueprint.comptes.models.comptes import Comptes
 from bd import db
 
 routes_comptes = Blueprint('gestion_comptes', __name__,
                            url_prefix='/comptes', template_folder='templates')
-
 
 @routes_comptes.route('/signup', methods=['GET', 'POST'])
 def signup():

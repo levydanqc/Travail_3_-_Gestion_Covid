@@ -9,6 +9,7 @@ from blueprint.erreurs.gestion_erreurs import routes_erreurs
 from babel.dates import format_date
 from datetime import datetime
 
+
 def create_app():
     app = Flask(__name__, template_folder='templates')
     app.config.from_object(config.DevelopmentConfig)
