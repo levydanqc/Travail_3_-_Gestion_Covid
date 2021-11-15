@@ -10,13 +10,13 @@ routes_cas = Blueprint('gestion_cas', __name__,
                        url_prefix='/cas', template_folder='templates')
 
 
-@routes_cas.route('/regions')
+@routes_cas.route('/')
 def accueil():
     regions = Regions.query.order_by(Regions.nom).all()
     return render_template('liste_region.html', regions=regions, number=format_number)
 
 
-@ routes_cas.route('/')
+@ routes_cas.route('/admin')
 def liste_admin():
     if not session.get('compte_id'):
         session['loginErreurs'] = {

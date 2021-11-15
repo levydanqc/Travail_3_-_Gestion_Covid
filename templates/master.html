@@ -35,6 +35,16 @@
 
   <script src="{{ url_for('static', filename='index.js') }}"></script>
   {% endblock %}
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TRTHQJWYGE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-TRTHQJWYGE');
+  </script>
 </head>
 
 
@@ -111,11 +121,11 @@
           <p class="text-danger m-0">{{ loginErreurs["username"] if loginErreurs["username"] is defined else '' }}</p>
           <form action="{{ url_for('gestion_comptes.login') }}" method="post" id="connexionForm">
             <div class="form-group mx-2 my-3">
-              <label for="cologin">Email</label>
+              <label for="cologin">Nom d'utilisateur</label>
               <input type="text" class="form-control" id="cologin" name="username">
             </div>
             <div class="form-group mx-2 my-3">
-              <label for="coPassword">Password</label>
+              <label for="coPassword">Mot de passe</label>
               <input type="password" class="form-control" id="coPassword" name="password">
             </div>
             <div class="form-check mx-2 my-3 mt-2">
@@ -143,7 +153,7 @@
         <div class="modal-body">
           <form action="{{ url_for('gestion_comptes.signup') }}" method="post" id="inscriptionForm">
             <div class="form-group mx-2 my-3">
-              <label for="login">Email</label>
+              <label for="login">Nom d'utilisateur</label>
               <input type="text" class="form-control" id="login" name="username">
               <p class="text-danger m-0">{{signupErreurs["username"] if signupErreurs["username"] is defined else ''}}
               </p>

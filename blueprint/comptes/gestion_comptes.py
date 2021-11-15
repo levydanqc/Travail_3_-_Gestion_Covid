@@ -5,6 +5,7 @@ from bd import db
 routes_comptes = Blueprint('gestion_comptes', __name__,
                            url_prefix='/comptes', template_folder='templates')
 
+
 @routes_comptes.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -12,7 +13,7 @@ def signup():
                          password=request.form.get('password'), confirm=request.form.get('confirm'))
         if len(compte.erreurs) > 0:
             session['signupErreurs'] = compte.erreurs
-            return redirect(request.referrer or '/')
+            return redirect(request.referrer or url_for('gestion_cas.accueil'))
         db.session.add(compte)
         db.session.commit()
         session['compte_id'] = compte.id
@@ -21,8 +22,8 @@ def signup():
             session.permanent = True
         else:
             session.permanent = False
-        return redirect(request.referrer or '/')
-    return redirect(request.referrer or '/')
+        return redirect(request.referrer or url_for('gestion_cas.accueil'))
+    return redirect(request.referrer or url_for('gestion_cas.accueil'))
 
 
 @routes_comptes.route('/login', methods=['GET', 'POST'])
@@ -35,7 +36,7 @@ def login():
             erreurs["username"] = "Le nom d'utilisateur ou le mot de passe n'est pas valide"
         if len(erreurs) > 0:
             session['loginErreurs'] = erreurs
-            return redirect(request.referrer or '/')
+            return redirect(request.referrer or url_for('gestion_cas.accueil'))
         session['compte_id'] = compte.id
         session['admin'] = compte.admin
         if request.form.get('rememberMe') == 'on':
@@ -44,12 +45,12 @@ def login():
             session.permanent = False
 
         return redirect(session.get('url') or url_for('gestion_cas.liste_admin'))
-    return redirect(request.referrer or '/')
+    return redirect(request.referrer or url_for('gestion_cas.accueil'))
 
 
 @routes_comptes.route('/logout', methods=['GET', 'POST'])
 def logout():
     if request.method == 'POST':
         session.clear()
-        return redirect('/')
-    return redirect('/')
+        return redirect(url_for('gestion_cas.accueil'))
+    return redirect(url_for('gestion_cas.accueil'))
