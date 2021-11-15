@@ -29,7 +29,7 @@ app = create_app()
 
 
 def refresh_date():
-    lang = request.cookies.get('lang') or config['DEFAULT_LOCALE']
+    lang = request.cookies.get('lang') or app.config['DEFAULT_LOCALE']
     session['date'] = format_date(
         datetime.today(), format='medium', locale=lang)
 
@@ -41,14 +41,16 @@ def index():
 
 @app.route('/fr')
 def fr():
-    response = make_response(redirect(request.referrer or '/'))
+    response = make_response(
+        redirect(request.referrer or url_for('gestion_cas.accueil')))
     response.set_cookie('lang', 'fr_CA', max_age=60 * 60 * 24 * 365)
     return response
 
 
 @app.route('/en')
 def en():
-    response = make_response(redirect(request.referrer or '/'))
+    response = make_response(
+        redirect(request.referrer or url_for('gestion_cas.accueil')))
     response.set_cookie('lang', 'en_CA', max_age=60 * 60 * 24 * 365)
     return response
 

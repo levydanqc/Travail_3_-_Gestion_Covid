@@ -75,7 +75,7 @@
 
     <nav class="my-3 d-flex">
       {% if session["compte_id"] %}
-      <form action="/comptes/logout" method="post">
+      <form action="{{ url_for('gestion_comptes.logout') }}" method="post">
         <button type="submit" class="btn btn-outline-danger">Déconnexion</button>
       </form>
       {% else %}
