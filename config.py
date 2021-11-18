@@ -10,7 +10,7 @@ class Config():
 
     IMAGE_UPLOADS = "/home/username/app/app/static/images/uploads"
 
-    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = False
 
     DEFAULT_LOCALE = "fr_CA"
 
@@ -29,7 +29,6 @@ class DevelopmentConfig(Config):
     DB_PASSWORD = "mysql"
     DB_SERVEUR = "localhost"
 
-    SESSION_COOKIE_SECURE = False
 
 
 class TestingConfig(Config):
@@ -39,5 +38,3 @@ class TestingConfig(Config):
     DB_USERNAME = "ubuntuserver"
     DB_PASSWORD = ""
     DB_SERVEUR = "localhost"
-
-    SESSION_COOKIE_SECURE = False

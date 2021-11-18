@@ -1,0 +1,35 @@
+{% extends "master.html" %}
+{% block title %}Liste - Compte{% endblock %}
+
+{% if comptes is not defined %}
+{% set comptes = [] %}
+{% endif %}
+
+{% block content %}
+
+<h1>Liste des comptes</h1>
+
+<table class="table">
+    <tr>
+        <th>Nom d'utilisateur</th>
+        <th>Droit</th>
+        <th>Action</th>
+    </tr>
+    <form method="post">
+        {% for compte in comptes %}
+        <tr>
+            <td>{{compte.compte}}</td>
+            <td>{{'Admin' if compte.admin == 1 else 'Utilisateur'}}</td>
+            <td>
+                <button formaction="{{ url_for('gestion_comptes.delete', id=compte.id) }}"
+                    type="submit">Supprimer</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </form>
+</table>
+
+<a onclick="openModal('ajouterModal')" class="btn btn-primary">Créer un compte</a>
+
+
+{% endblock %}

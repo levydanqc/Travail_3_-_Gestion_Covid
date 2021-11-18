@@ -61,4 +61,4 @@ def before_request():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host=app.config['HOST'])
+    app.run(debug=app.config["DEBUG"], host=app.config['HOST'])

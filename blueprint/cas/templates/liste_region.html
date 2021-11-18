@@ -1,6 +1,10 @@
 {% extends "master.html" %}
 {% block title %}Liste - Région{% endblock %}
 
+{% if regions is not defined %}
+{% set regions = [] %}
+{% endif %}
+
 {% block content %}
 
 <h1>Liste des cas</h1>

@@ -7,7 +7,9 @@
 
 {% with messages = get_flashed_messages() %}
 {% if messages | length %}
-<h2 class="my-5">{{messages[0]}}</h2>
+{% for message in messages %}
+<h2 class="my-5">{{message}}</h2>
+{% endfor %}
 {% endif %}
 {% endwith %}
 

@@ -18,9 +18,7 @@ def accueil():
 
 @ routes_cas.route('/admin')
 def liste_admin():
-    if not session.get('compte_id'):
-        session['loginErreurs'] = {
-            "username": "Vous devez être authentifié pour accéder à cette page"}
+    if not session.get('admin'):
         session['url'] = url_for('gestion_cas.liste_admin')
         abort(403)
     cas = Cas.query.all()
@@ -57,6 +55,7 @@ def supprimer_cas(id):
         abort(401)
     if not session.get('admin'):
         session['url'] = url_for('gestion_cas.supprimer_cas')
+        flash('Vous devez être administrateur pour accéder à cette page', 'danger')
         abort(403)
     if request.method == 'POST':
         Cas.query.filter_by(id=id).delete()

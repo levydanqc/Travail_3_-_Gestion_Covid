@@ -1,9 +1,40 @@
-from flask import Blueprint, request, redirect, url_for, session
+from flask import Blueprint, request, redirect, url_for, session, render_template, session, flash, abort
 from blueprint.comptes.models.comptes import Comptes
 from bd import db
 
 routes_comptes = Blueprint('gestion_comptes', __name__,
                            url_prefix='/comptes', template_folder='templates')
+
+
+@routes_comptes.route('/')
+def index():
+    return render_template('comptes.html', comptes=Comptes.query.all())
+
+
+@routes_comptes.route('/ajouter', methods=['GET', 'POST'])
+def ajouter():
+    if not session.get('admin'):
+        session['url'] = url_for('gestion_comptes.ajouter')
+        abort(403)
+    compte = Comptes(username=request.form.get('username'),
+                     password=request.form.get('password'), confirm=request.form.get('confirm'))
+    db.session.add(compte)
+    db.session.commit()
+    flash("Le compte à était ajouté avec succès", "success")
+    return redirect(url_for('gestion_comptes.index'))
+
+
+@routes_comptes.route('/supprimer/<int:id>', methods=['GET', 'POST'])
+def delete(id):
+    if not session.get('admin'):
+        session['url'] = url_for('gestion_comptes.ajouter')
+        flash("Vous devez être administrateur pour accéder à cette page", "danger")
+        abort(403)
+    compte = Comptes.query.get(id)
+    db.session.delete(compte)
+    db.session.commit()
+    flash("Le compte à était supprimé avec succès", "success")
+    return redirect(url_for('gestion_comptes.index'))
 
 
 @routes_comptes.route('/signup', methods=['GET', 'POST'])
