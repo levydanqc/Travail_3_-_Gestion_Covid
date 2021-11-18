@@ -16,16 +16,18 @@ def accueil():
     return render_template('liste_region.html', regions=regions, number=format_number)
 
 
-@ routes_cas.route('/admin')
+@routes_cas.route('/admin')
 def liste_admin():
-    if not session.get('admin'):
+    if not session.get('compte_id'):
+        session['loginErreurs'] = {
+            "username": "Vous devez être authentifié pour accéder à cette page"}
         session['url'] = url_for('gestion_cas.liste_admin')
-        abort(403)
+        abort(401)
     cas = Cas.query.all()
     return render_template('liste_admin.html', lesCas=cas, regions=Regions, date=format_date)
 
 
-@ routes_cas.route('/creer', methods=['GET', 'POST'])
+@routes_cas.route('/creer', methods=['GET', 'POST'])
 def creer_cas():
     if not session.get('compte_id'):
         session['loginErreurs'] = {
@@ -48,14 +50,13 @@ def creer_cas():
     return render_template('saisie.html', regions=Regions.query.order_by(Regions.nom).all())
 
 
-@ routes_cas.route('/<int:id>/delete', methods=['GET', 'POST'])
+@routes_cas.route('/<int:id>/delete', methods=['GET', 'POST'])
 def supprimer_cas(id):
-    if not session.get('compte_id'):
-        session['url'] = url_for('gestion_cas.supprimer_cas')
-        abort(401)
     if not session.get('admin'):
         session['url'] = url_for('gestion_cas.supprimer_cas')
-        flash('Vous devez être administrateur pour accéder à cette page', 'danger')
+        if not session.get('compte_id'):
+            session['loginErreurs'] = {
+                "username": "Vous devez être authentifié pour accéder à cette page"}
         abort(403)
     if request.method == 'POST':
         Cas.query.filter_by(id=id).delete()

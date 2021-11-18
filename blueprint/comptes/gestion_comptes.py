@@ -8,6 +8,12 @@ routes_comptes = Blueprint('gestion_comptes', __name__,
 
 @routes_comptes.route('/')
 def index():
+    if not session.get('admin'):
+        session['url'] = url_for('gestion_comptes.index')
+        if not session.get('compte_id'):
+            session['loginErreurs'] = {
+                "username": "Vous devez être authentifié pour accéder à cette page"}
+        abort(403)
     return render_template('comptes.html', comptes=Comptes.query.all())
 
 
@@ -15,6 +21,9 @@ def index():
 def ajouter():
     if not session.get('admin'):
         session['url'] = url_for('gestion_comptes.ajouter')
+        if not session.get('compte_id'):
+            session['loginErreurs'] = {
+                "username": "Vous devez être authentifié pour accéder à cette page"}
         abort(403)
     compte = Comptes(username=request.form.get('username'),
                      password=request.form.get('password'), confirm=request.form.get('confirm'))
@@ -28,7 +37,9 @@ def ajouter():
 def delete(id):
     if not session.get('admin'):
         session['url'] = url_for('gestion_comptes.ajouter')
-        flash("Vous devez être administrateur pour accéder à cette page", "danger")
+        if not session.get('compte_id'):
+            session['loginErreurs'] = {
+                "username": "Vous devez être authentifié pour accéder à cette page"}
         abort(403)
     compte = Comptes.query.get(id)
     db.session.delete(compte)
