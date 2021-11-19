@@ -1,9 +1,11 @@
-from bd import db
-import re
+""" Module du modèle de Compte. """
 import hashlib
+
+from bd import db
 
 
 class Comptes(db.Model):
+    """ Model d'un compte. """
     __tablename__ = "comptes"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -16,9 +18,18 @@ class Comptes(db.Model):
 
     @staticmethod
     def hash_pwd(password):
+        """ Hashage du mot de passe.
+
+        Args:
+            password (string): Mot de passe à hasher.
+
+        Returns:
+            _Hash: Le mot de passe hashé.
+        """
         return hashlib.sha256(password.encode()).hexdigest()[:45]
 
     def __init__(self, username, password, confirm):
+        """ Constructeur de la classe Comptes. """
         self.erreurs = {}
         self.compte = username
         self.password = self.hash_pwd(password)
@@ -26,6 +37,7 @@ class Comptes(db.Model):
         self.valider(confirm)
 
     def valider(self, confirm):
+        """ Validation du compte. """
         if Comptes.query.filter_by(compte=self.compte).first():
             self.erreurs['compte'] = "Ce compte existe déjà"
         if len(self.compte) < 5:
@@ -36,4 +48,9 @@ class Comptes(db.Model):
             self.erreurs['confirm'] = "Les mots de passe ne correspondent pas."
 
     def __repr__(self):
+        """ Représentation de la classe Comptes.
+
+        Returns:
+            string: Le nom du compte
+        """
         return 'Compte: %s' % (self.compte)

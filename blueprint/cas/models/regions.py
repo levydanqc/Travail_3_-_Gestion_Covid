@@ -1,6 +1,9 @@
+""" Module du modèle de Région. """
 from bd import db
 
+
 class Regions(db.Model):
+    """ Model d'une région du Québec. """
     __tablename__ = "regions"
 
     id = db.Column(db.Integer, primary_key=True)

@@ -1,4 +1,7 @@
-from flask import Blueprint, request, redirect, url_for, session, render_template, session, flash, abort
+""" Module de gestion des comptes. """
+from flask import Blueprint, request, redirect, url_for, session, \
+    render_template, flash, abort
+
 from blueprint.comptes.models.comptes import Comptes
 from bd import db
 
@@ -8,6 +11,11 @@ routes_comptes = Blueprint('gestion_comptes', __name__,
 
 @routes_comptes.route('/')
 def index():
+    """ Route de la page d'accueil des comptes.
+
+    Returns:
+        Render_template: La page d'accueil des comptes
+    """
     if not session.get('admin'):
         session['url'] = url_for('gestion_comptes.index')
         if not session.get('compte_id'):
@@ -19,6 +27,11 @@ def index():
 
 @routes_comptes.route('/ajouter', methods=['GET', 'POST'])
 def ajouter():
+    """ Route de la création d'un compte.
+
+    Returns:
+        HttpResponse: La page d'accueil (Redirection)
+    """
     if not session.get('admin'):
         session['url'] = url_for('gestion_comptes.ajouter')
         if not session.get('compte_id'):
@@ -34,14 +47,22 @@ def ajouter():
 
 
 @routes_comptes.route('/supprimer/<int:id>', methods=['GET', 'POST'])
-def delete(id):
+def delete(id_compte):
+    """ Route de la suppression d'un compte.
+
+    Args:
+        id (int): Id du compte à supprimer
+
+    Returns:
+        HttpResponse: La page d'accueil (Redirection)
+    """
     if not session.get('admin'):
         session['url'] = url_for('gestion_comptes.ajouter')
         if not session.get('compte_id'):
             session['loginErreurs'] = {
                 "username": "Vous devez être authentifié pour accéder à cette page"}
         abort(403)
-    compte = Comptes.query.get(id)
+    compte = Comptes.query.get(id_compte)
     db.session.delete(compte)
     db.session.commit()
     flash("Le compte à était supprimé avec succès", "success")
@@ -50,6 +71,11 @@ def delete(id):
 
 @routes_comptes.route('/signup', methods=['GET', 'POST'])
 def signup():
+    """ Route de la création d'un compte.
+
+    Returns:
+        HttpResponse: La page précédante (Redirection) ou la page d'accueil (Redirection)
+    """
     if request.method == 'POST':
         compte = Comptes(username=request.form.get('username'),
                          password=request.form.get('password'), confirm=request.form.get('confirm'))
@@ -70,6 +96,11 @@ def signup():
 
 @routes_comptes.route('/login', methods=['GET', 'POST'])
 def login():
+    """ Route de la connexion d'un compte.
+
+    Returns:
+        HttpResponse: La page précédante (Redirection) ou la page d'accueil (Redirection)
+    """
     if request.method == 'POST':
         erreurs = {}
         compte = Comptes.query.filter_by(compte=request.form.get(
@@ -92,6 +123,11 @@ def login():
 
 @routes_comptes.route('/logout', methods=['GET', 'POST'])
 def logout():
+    """ Route de la déconnexion d'un compte.
+
+    Returns:
+        HttpResponse: La page d'accueil (Redirection)
+    """
     if request.method == 'POST':
         session.clear()
         return redirect(url_for('gestion_cas.accueil'))

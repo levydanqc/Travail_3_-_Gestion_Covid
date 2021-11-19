@@ -1,4 +1,8 @@
+""" Module des configurations. """
+
+
 class Config():
+    """ Modèle de configuration de base. """
     DEBUG = False
     TESTING = False
     SECRET_KEY = "B\xb2?.\xdf\x9f\xa7m\xf8\x8a%,\xf7\xc4\xfa\x91"
@@ -17,11 +21,8 @@ class Config():
     HOST = "0.0.0.0"
 
 
-class ProductionConfig(Config):
-    pass
-
-
 class DevelopmentConfig(Config):
+    """ Configuration de développement. """
     DEBUG = True
 
     DB_NAME = "gestion_covid"
@@ -30,8 +31,8 @@ class DevelopmentConfig(Config):
     DB_SERVEUR = "localhost"
 
 
-
 class TestingConfig(Config):
+    """ Configuration de test. """
     TESTING = True
 
     DB_NAME = "gestion_covid"
