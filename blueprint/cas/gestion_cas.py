@@ -67,7 +67,7 @@ def creer_cas():
     return render_template('saisie.html', regions=Regions.query.order_by(Regions.nom).all())
 
 
-@routes_cas.route('/<int:id>/delete', methods=['GET', 'POST'])
+@routes_cas.route('/delete/<int:id_cas>', methods=['GET', 'POST'])
 def supprimer_cas(id_cas):
     """ Route de la suppression d'un cas.
 
@@ -77,15 +77,16 @@ def supprimer_cas(id_cas):
     Returns:
         Http: Requête HTTP (Redirection)
     """
+    session['url'] = url_for('gestion_cas.supprimer_cas', id_cas=id_cas)
+    if not session.get('compte_id'):
+        session['loginErreurs'] = {
+            "username": "Vous devez être authentifié pour accéder à cette page"}
+        abort(401)
     if not session.get('admin'):
-        session['url'] = url_for('gestion_cas.supprimer_cas')
-        if not session.get('compte_id'):
-            session['loginErreurs'] = {
-                "username": "Vous devez être authentifié pour accéder à cette page"}
         abort(403)
     if request.method == 'POST':
         Cas.query.filter_by(id=id_cas).delete()
         db.session.commit()
         flash('Le cas a été supprimé avec succès.', 'success')
-        return redirect(request.referrer or '/')
-    return redirect(request.referrer or '/')
+        return redirect(url_for('gestion_cas.liste_admin'))
+    return redirect(url_for('gestion_cas.liste_admin'))

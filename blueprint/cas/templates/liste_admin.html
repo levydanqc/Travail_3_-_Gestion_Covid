@@ -22,7 +22,7 @@
       <td>{{cas}}</td>
       {% if session.get('admin') %}
       <td>
-        <button formaction="{{ url_for('gestion_cas.supprimer_cas', id=cas.id) }}" type="submit">Supprimer</button>
+        <button formaction="{{ url_for('gestion_cas.supprimer_cas', id_cas=cas.id) }}" type="submit">Supprimer</button>
       </td>
       {% endif %}
     </tr>

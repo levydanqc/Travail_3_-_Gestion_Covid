@@ -16,11 +16,12 @@ def index():
     Returns:
         Render_template: La page d'accueil des comptes
     """
+    session['url'] = url_for('gestion_comptes.index')
+    if not session.get('compte_id'):
+        session['loginErreurs'] = {
+            "username": "Vous devez être authentifié pour accéder à cette page"}
+        abort(401)
     if not session.get('admin'):
-        session['url'] = url_for('gestion_comptes.index')
-        if not session.get('compte_id'):
-            session['loginErreurs'] = {
-                "username": "Vous devez être authentifié pour accéder à cette page"}
         abort(403)
     return render_template('comptes.html', comptes=Comptes.query.all())
 
@@ -32,11 +33,12 @@ def ajouter():
     Returns:
         HttpResponse: La page d'accueil (Redirection)
     """
+    session['url'] = url_for('gestion_comptes.index')
+    if not session.get('compte_id'):
+        session['loginErreurs'] = {
+            "username": "Vous devez être authentifié pour accéder à cette page"}
+        abort(401)
     if not session.get('admin'):
-        session['url'] = url_for('gestion_comptes.ajouter')
-        if not session.get('compte_id'):
-            session['loginErreurs'] = {
-                "username": "Vous devez être authentifié pour accéder à cette page"}
         abort(403)
     compte = Comptes(username=request.form.get('username'),
                      password=request.form.get('password'), confirm=request.form.get('confirm'))
@@ -56,11 +58,12 @@ def delete(id_compte):
     Returns:
         HttpResponse: La page d'accueil (Redirection)
     """
+    session['url'] = url_for('gestion_comptes.delete', id_compte=id_compte)
+    if not session.get('compte_id'):
+        session['loginErreurs'] = {
+            "username": "Vous devez être authentifié pour accéder à cette page"}
+        abort(401)
     if not session.get('admin'):
-        session['url'] = url_for('gestion_comptes.ajouter')
-        if not session.get('compte_id'):
-            session['loginErreurs'] = {
-                "username": "Vous devez être authentifié pour accéder à cette page"}
         abort(403)
     compte = Comptes.query.get(id_compte)
     db.session.delete(compte)
